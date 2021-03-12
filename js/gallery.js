@@ -1,4 +1,6 @@
 import images from './gallery-items.js'
+import cardsMurkup from './cards-murkup.js'
+import refs from './refs.js'
 
 //------------------------------------------------
 // Разбей задание на несколько подзадач :
@@ -16,63 +18,36 @@ import images from './gallery-items.js'
 //-------------------------------------------------
 // console.log()
 // console.log(createImageCardsMarkup(images));
-const imagesContainer = document.querySelector('.js-gallery');
-// console.log(imagesContainer)
-const imagesModalWindow = document.querySelector('.js-lightbox');
-// console.log(imagesModalWindow)
-const imagesSrcAttributeChange = document.querySelector('.lightbox__image');
-// console.log(imagesSrcAttributeChange)
 
-const imagesMarkup = createImageCardsMarkup(images);
+ refs.imagesContainer.innerHTML = cardsMurkup(images);
 // console.log(imagesMarkup)
-imagesContainer.insertAdjacentHTML('beforeend', imagesMarkup);
+// refs.imagesContainer.insertAdjacentHTML('beforeend', imagesMarkup);
 
-imagesContainer.addEventListener('click', onImageContainerClick);
-imagesModalWindow.addEventListener('click', onBtnCloseClick);
+// refs.imagesContainer.addEventListener('click', onImageContainerClick);
+// imagesModalWindow.addEventListener('click', onBtnCloseClick);
+refs.imagesContainer.addEventListener('click', onModalOpen)
+refs.modalCloseBtn.addEventListener('click', onModalClose)
+refs.modalOverlay.addEventListener('click', onModalClose)
+window.addEventListener('keydown', onModalClose)
+// window.addEventListener('keydown', onModalChangeImgByKeyDown)
 
-function createImageCardsMarkup(images) {
-    return images.map(({original, preview, description}) => {
-        return ` 
-<li class="gallery__item">
-  <a class="gallery__link"
-    href="${original}">
-    <img
-      class="gallery__image"
-      src="${preview}"
-      data-source="${original}"
-      alt="${description}"/>
-  </a>
-</li>
-    `;
-    })
-    .join('')
-};
+function getAttributes(src, alt) {
+    refs.modalImg.src = src;
+    refs.modalImg.alt = alt;
+}
 
-function onImageContainerClick(evt) {
+function onModalOpen(evt) {
     evt.preventDefault();
-    const isImageTargetEl = evt.target.classList.contains('gallery__image');
+    refs.imagesModalWindow.classList.add('is-open');
     
-    if (!isImageTargetEl) {
-    //    console.log(isImageTargetEl)
-        return;  
-    }
-    imagesModalWindow.classList.add('is-open');
-    // console.log(evt.target.classList.contains('gallery__item'));
+    getAttributes(evt.target.dataset.source, evt.target.alt);
+   }
 
-    const swatchEl = evt.target;
+function onModalClose(evt) {
+    if (evt.target === evt.currentTarget || evt.code === 'Escape') {
+        refs.imagesModalWindow.classList.remove('is-open');
 
-    // console.log(swatchEl.dataset.source)
-    imagesSrcAttributeChange.setAttribute("src", `${swatchEl.dataset.source}` );
-    // console.log(imagesSrcAttributeChange.getAttribute("src"));
-}
+        getAttributes('','')
+  }
+   }
 
-// изменить эту фунуцию
-function onBtnCloseClick(evt) {
- const isImageTargetEl = evt.target.classList.contains('is-open');
-    if (isImageTargetEl) {
-       console.log(isImageTargetEl)
-        return;
-    }
-    imagesModalWindow.classList.remove('is-open');
-    // console.log(evt.target.classList.contains('gallery__item'))
-}
