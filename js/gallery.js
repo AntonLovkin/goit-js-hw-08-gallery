@@ -16,20 +16,12 @@ import refs from './refs.js'
 // чтобы при следующем открытии модального окна, пока грузится изображение,
 // мы не видели предыдущее.
 //-------------------------------------------------
-// console.log()
-// console.log(createImageCardsMarkup(images));
-
  refs.imagesContainer.innerHTML = cardsMurkup(images);
-// console.log(imagesMarkup)
-// refs.imagesContainer.insertAdjacentHTML('beforeend', imagesMarkup);
 
-// refs.imagesContainer.addEventListener('click', onImageContainerClick);
-// imagesModalWindow.addEventListener('click', onBtnCloseClick);
 refs.imagesContainer.addEventListener('click', onModalOpen)
 refs.modalCloseBtn.addEventListener('click', onModalClose)
 refs.modalOverlay.addEventListener('click', onModalClose)
 window.addEventListener('keydown', onModalClose)
-// window.addEventListener('keydown', onModalChangeImgByKeyDown)
 
 function getAttributes(src, alt) {
     refs.modalImg.src = src;
